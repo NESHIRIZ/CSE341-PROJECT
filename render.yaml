@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ecommerce-marketplace-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    env:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        generateValue: true
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        value: https://ecommerce-marketplace-api.onrender.com/api/auth/google/callback
+      - key: SESSION_SECRET
+        generateValue: true
+    healthCheckPath: /health
