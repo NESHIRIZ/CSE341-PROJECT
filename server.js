@@ -30,11 +30,13 @@ app.use(
     credentials: true,
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   })
 );
+app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 
 app.get('/health', (req, res) => {
   res.status(200).json({ success: true, status: 'ok' });
