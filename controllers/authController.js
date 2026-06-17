@@ -89,16 +89,24 @@ export const login = async (req, res, next) => {
   }
 };
 
-export const logout = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: 'Logout successful',
-  });
+export const logout = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'Logout successful',
+    });
+  } catch (error) {
+    next(error);
+  }
 };
 
-export const getCurrentUser = async (req, res) => {
-  res.status(200).json({
-    success: true,
-    data: req.user,
-  });
+export const getCurrentUser = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      success: true,
+      data: req.user,
+    });
+  } catch (error) {
+    next(error);
+  }
 };

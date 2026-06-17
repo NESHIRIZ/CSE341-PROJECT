@@ -70,7 +70,7 @@ export const optionalAuth = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, jwtSecret);
+    const payload = jwt.verify(token, getJwtSecret());
     req.user = await User.findById(payload.id).select('-password');
   } catch (_error) {
     // ignore invalid token
