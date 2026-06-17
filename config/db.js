@@ -12,6 +12,8 @@ const connectDB = async () => {
       throw new Error('MONGO_URI environment variable is not set');
     }
 
+    mongoose.set('strictQuery', false);
+
     await mongoose.connect(mongoURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,

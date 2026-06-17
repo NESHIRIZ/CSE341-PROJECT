@@ -1,5 +1,7 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 
+const serverUrl = process.env.SWAGGER_SERVER_URL || process.env.SWAGGER_BASE_URL || '/';
+
 const options = {
   definition: {
     openapi: '3.0.0',
@@ -14,11 +16,18 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000',
-        description: 'Development server',
+        url: serverUrl,
+        description: 'API server (relative)',
       },
     ],
     components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
       schemas: {
         User: {
           type: 'object',

@@ -112,14 +112,3 @@ export const deleteDealership = async (req, res, next) => {
     next(error);
   }
 };
-    return res.status(404).json({
-      success: false,
-      message: 'Dealership not found',
-    });
-  }
-
-  res.status(200).json({
-    success: true,
-    message: 'Dealership deleted successfully',
-  });
-});

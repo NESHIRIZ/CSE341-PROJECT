@@ -7,15 +7,16 @@ import Vehicle from '../models/Vehicle.js';
 import Dealership from '../models/Dealership.js';
 
 describe('Reviews GET Routes', () => {
-  let userId, vehicleId, dealershipId;
+  let userId;
+  let vehicleId;
+  let dealershipId;
 
   beforeAll(async () => {
-    // Connect to test database if not already connected
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI);
-    }
+    await User.deleteMany({});
+    await Vehicle.deleteMany({});
+    await Dealership.deleteMany({});
+    await Review.deleteMany({});
 
-    // Create test user
     const user = await User.create({
       firstName: 'Bob',
       lastName: 'Johnson',
@@ -25,16 +26,14 @@ describe('Reviews GET Routes', () => {
     });
     userId = user._id;
 
-    // Create test dealership
     const dealership = await Dealership.create({
       name: 'Test Dealership',
-      location: '123 Main St',
+      location: '123 Main St, Test City',
       phone: '555-0123',
       email: 'dealer@example.com',
     });
     dealershipId = dealership._id;
 
-    // Create test vehicle
     const vehicle = await Vehicle.create({
       make: 'Toyota',
       model: 'Camry',
@@ -47,7 +46,6 @@ describe('Reviews GET Routes', () => {
   });
 
   afterAll(async () => {
-    // Clean up and disconnect
     await Review.deleteMany({});
     await User.deleteMany({});
     await Vehicle.deleteMany({});
@@ -56,13 +54,11 @@ describe('Reviews GET Routes', () => {
   });
 
   beforeEach(async () => {
-    // Clean reviews before each test
     await Review.deleteMany({});
   });
 
   describe('GET /api/reviews', () => {
     test('should return all reviews with success true', async () => {
-      // Create test reviews
       await Review.create({
         userId,
         vehicleId,
@@ -168,7 +164,6 @@ describe('Reviews GET Routes', () => {
 
     test('should return 404 for non-existent review', async () => {
       const fakeId = new mongoose.Types.ObjectId();
-
       const response = await request(app).get(`/api/reviews/${fakeId}`);
 
       expect(response.status).toBe(404);
@@ -181,78 +176,6 @@ describe('Reviews GET Routes', () => {
 
       expect(response.status).toBe(400);
       expect(response.body.success).toBe(false);
-    });
-
-    test('should verify review data accuracy', async () => {
-      const review = await Review.create({
-        userId,
-        vehicleId,
-        rating: 4,
-        comment: 'Great car!',
-      });
-
-      const response = await request(app).get(`/api/reviews/${review._id}`);
-
-      expect(response.body.data.rating).toBe(4);
-      expect(response.body.data.comment).toBe('Great car!');
-    });
-  });
-});
-      expect(response.status).toBe(200);
-      expect(response.body.success).toBe(true);
-      expect(Array.isArray(response.body.data)).toBe(true);
-    });
-
-    test('should return reviews with populated references', async () => {
-      const response = await request(app).get('/api/reviews');
-      if (response.body.data.length > 0) {
-        const review = response.body.data[0];
-        expect(review.productId).toBeDefined();
-        expect(review.userId).toBeDefined();
-        expect(review.rating).toBeDefined();
-      }
-    });
-
-    test('should return valid ratings', async () => {
-      const response = await request(app).get('/api/reviews');
-      if (response.body.data.length > 0) {
-        const review = response.body.data[0];
-        expect(review.rating).toBeGreaterThanOrEqual(1);
-        expect(review.rating).toBeLessThanOrEqual(5);
-      }
-    });
-  });
-
-  describe('GET /api/reviews/:id', () => {
-    let reviewId;
-
-    beforeAll(async () => {
-      const review = await Review.findOne({ rating: 5 });
-      reviewId = review._id.toString();
-    });
-
-    test('should get review by valid ID', async () => {
-      const response = await request(app).get(`/api/reviews/${reviewId}`);
-      expect(response.status).toBe(200);
-      expect(response.body.success).toBe(true);
-    });
-
-    test('should return review data with comment', async () => {
-      const response = await request(app).get(`/api/reviews/${reviewId}`);
-      expect(response.body.data.rating).toBe(5);
-      expect(response.body.data.comment).toBe('Excellent product!');
-    });
-
-    test('should return 404 for non-existent review', async () => {
-      const fakeId = '507f1f77bcf86cd799439011';
-      const response = await request(app).get(`/api/reviews/${fakeId}`);
-      expect(response.status).toBe(404);
-      expect(response.body.success).toBe(false);
-    });
-
-    test('should return 400 for invalid ID format', async () => {
-      const response = await request(app).get('/api/reviews/invalidid');
-      expect(response.status).toBe(400);
     });
   });
 });

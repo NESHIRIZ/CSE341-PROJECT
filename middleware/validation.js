@@ -17,7 +17,7 @@ export const handleValidationErrors = (req, res, next) => {
 };
 
 // User validation rules
-export const validateUser = [
+export const validateRegister = [
   body('firstName')
     .trim()
     .notEmpty()
@@ -42,6 +42,17 @@ export const validateUser = [
     .optional()
     .isIn(['buyer', 'seller', 'admin'])
     .withMessage('Role must be buyer, seller, or admin'),
+];
+
+export const validateLogin = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Valid email is required')
+    .normalizeEmail(),
+  body('password')
+    .notEmpty()
+    .withMessage('Password is required'),
 ];
 
 export const validateUserUpdate = [

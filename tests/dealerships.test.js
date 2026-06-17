@@ -5,10 +5,6 @@ import Dealership from '../models/Dealership.js';
 
 describe('Dealerships GET Routes', () => {
   beforeAll(async () => {
-    // Connect to test database if not already connected
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI);
-    }
   });
 
   afterAll(async () => {

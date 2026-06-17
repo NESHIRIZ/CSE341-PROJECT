@@ -8,12 +8,6 @@ describe('Vehicles GET Routes', () => {
   let dealershipId;
 
   beforeAll(async () => {
-    // Connect to test database if not already connected
-    if (mongoose.connection.readyState === 0) {
-      await mongoose.connect(process.env.MONGO_URI);
-    }
-
-    // Create a test dealership
     const dealership = await Dealership.create({
       name: 'Test Dealership',
       location: '123 Main St',
