@@ -1,6 +1,7 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 
-const serverUrl = process.env.SWAGGER_SERVER_URL || process.env.RENDER_EXTERNAL_URL || process.env.SWAGGER_BASE_URL || '/';
+const configuredUrl = process.env.SWAGGER_SERVER_URL || process.env.RENDER_EXTERNAL_URL || process.env.SWAGGER_BASE_URL;
+const serverUrl = configuredUrl && configuredUrl !== '/' ? configuredUrl : `http://localhost:${process.env.PORT || 5000}`;
 
 const options = {
   definition: {
