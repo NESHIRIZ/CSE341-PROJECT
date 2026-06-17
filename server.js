@@ -12,7 +12,7 @@ import reviewRoutes from './routes/reviewRoutes.js';
 import errorHandler, { notFoundHandler } from './middleware/errorHandler.js';
 
 const app = express();
-const PORT = Number(process.env.PORT) || 5000;
+const PORT = Number(process.env.PORT) || 3000;
 
 const validateRequiredEnv = () => {
   if (process.env.NODE_ENV === 'test') return;
@@ -26,9 +26,8 @@ validateRequiredEnv();
 
 app.use(
   cors({
-    origin: true,
-    credentials: true,
-    methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     preflightContinue: false,
     optionsSuccessStatus: 204,
@@ -82,8 +81,12 @@ const startServer = async () => {
 
   const server = app.listen(PORT, () => {
     const actualPort = server.address().port;
+    const apiHost = process.env.RENDER_EXTERNAL_URL || process.env.SWAGGER_SERVER_URL || process.env.SWAGGER_BASE_URL || `http://localhost:${actualPort}`;
+    const docsUrl = apiHost.toString().replace(/\/$/, '') + '/api-docs';
+
     console.log(`Server running on port ${actualPort}`);
-    console.log(`API Documentation: http://localhost:${actualPort}/api-docs`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`API Documentation: ${docsUrl}`);
   });
 
   server.on('error', (error) => {

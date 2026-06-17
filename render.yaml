@@ -12,4 +12,6 @@ services:
         generateValue: true
       - key: JWT_SECRET
         generateValue: true
+      - key: RENDER_EXTERNAL_URL
+        value: https://ecommerce-marketplace-api.onrender.com
     healthCheckPath: /health
