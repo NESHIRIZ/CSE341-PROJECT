@@ -15,6 +15,28 @@ const options = {
         email: 'support@vehiclemarketplace.com',
       },
     },
+    tags: [
+      {
+        name: 'Authentication',
+        description: 'Endpoints for user registration, login, logout, and current user retrieval.',
+      },
+      {
+        name: 'Dealership',
+        description: 'Dealership management endpoints.',
+      },
+      {
+        name: 'Users',
+        description: 'User management and retrieval endpoints.',
+      },
+      {
+        name: 'Vehicles',
+        description: 'Vehicle inventory management endpoints.',
+      },
+      {
+        name: 'Reviews',
+        description: 'Vehicle review management endpoints.',
+      },
+    ],
     servers: [
       {
         url: serverUrl,

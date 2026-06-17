@@ -421,6 +421,14 @@ PUT    /api/orders/:id         # Update order
 DELETE /api/orders/:id         # Delete order
 ```
 
+### Authentication
+```
+POST   /api/auth/register      # Register a new user
+POST   /api/auth/login         # Login with email/password
+GET    /api/auth/me            # Get current user
+POST   /api/auth/logout        # Logout
+```
+
 ### Reviews
 ```
 GET    /api/reviews            # Get all reviews
@@ -429,14 +437,6 @@ GET    /api/reviews/product/:productId  # Get reviews for product
 POST   /api/reviews            # Create review
 PUT    /api/reviews/:id        # Update review
 DELETE /api/reviews/:id        # Delete review
-```
-
-### Authentication
-```
-POST   /api/auth/register      # Register a new user
-POST   /api/auth/login         # Login with email/password
-GET    /api/auth/me            # Get current user
-POST   /api/auth/logout        # Logout
 ```
 
 ## 📝 API Examples

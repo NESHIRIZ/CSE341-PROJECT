@@ -19,7 +19,7 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Dealerships
+ *   - name: Dealership
  *     description: Dealership management
  */
 
@@ -28,7 +28,7 @@ const router = express.Router();
  * /api/dealerships:
  *   get:
  *     summary: Get all dealerships
- *     tags: [Dealerships]
+ *     tags: [Dealership]
  *     responses:
  *       200:
  *         description: List of dealerships
@@ -53,7 +53,7 @@ router.get('/', getAllDealerships);
  * /api/dealerships/{id}:
  *   get:
  *     summary: Get a dealership by ID
- *     tags: [Dealerships]
+ *     tags: [Dealership]
  *     parameters:
  *       - in: path
  *         name: id
@@ -88,7 +88,7 @@ router.get('/:id', validateDealershipId, handleValidationErrors, getDealershipBy
  * /api/dealerships:
  *   post:
  *     summary: Create a new dealership
- *     tags: [Dealerships]
+ *     tags: [Dealership]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -110,7 +110,7 @@ router.post('/', isAuthenticated, validateDealership, handleValidationErrors, cr
  * /api/dealerships/{id}:
  *   put:
  *     summary: Update an existing dealership
- *     tags: [Dealerships]
+ *     tags: [Dealership]
  *     security:
  *       - BearerAuth: []
  *     parameters:
@@ -143,7 +143,7 @@ router.put('/:id', validateDealershipId, isAuthenticated, validateDealershipUpda
  * /api/dealerships/{id}:
  *   delete:
  *     summary: Delete a dealership
- *     tags: [Dealerships]
+ *     tags: [Dealership]
  *     security:
  *       - BearerAuth: []
  *     parameters:
