@@ -22,7 +22,7 @@
 - Add tests for POST, PUT, DELETE (currently only GET and GET by ID covered)
 - Harden production CORS origin (currently origin: true) — consider restricting to your domain
 - Add role-based authorization tests and examples (optional)
-- Update README/PROJECT_SUMMARY to remove any leftover OAuth references (recommended)
+- Confirm README/PROJECT_SUMMARY no longer references OAuth (recommended)
 
 ## Files Modified in this Audit
 - models/User.js (relaxed email regex)
@@ -30,7 +30,7 @@
 - routes/vehicleRoutes.js (added Swagger docs)
 - routes/dealershipRoutes.js (added Swagger docs)
 - routes/reviewRoutes.js (added Swagger docs)
-- render.yaml (removed Google OAuth vars, added JWT_SECRET)
+- render.yaml (removed OAuth vars, added JWT_SECRET)
 
 ## Next Steps / Suggestions
 - Add integration tests for POST/PUT/DELETE to increase rubric coverage

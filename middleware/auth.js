@@ -1,7 +1,13 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-const jwtSecret = process.env.JWT_SECRET || 'change-this-secret';
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return secret;
+};
 
 export const isAuthenticated = async (req, res, next) => {
   const authHeader = req.headers.authorization || '';
@@ -15,7 +21,7 @@ export const isAuthenticated = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, jwtSecret);
+    const payload = jwt.verify(token, getJwtSecret());
     const user = await User.findById(payload.id).select('-password');
 
     if (!user) {

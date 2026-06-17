@@ -1,8 +1,15 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 
-const jwtSecret = process.env.JWT_SECRET || 'change-this-secret';
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN || '1h';
+
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) {
+    throw new Error('JWT_SECRET environment variable is not set');
+  }
+  return secret;
+};
 
 const signToken = (user) => {
   return jwt.sign(
@@ -11,7 +18,7 @@ const signToken = (user) => {
       email: user.email,
       role: user.role,
     },
-    jwtSecret,
+    getJwtSecret(),
     {
       expiresIn: jwtExpiresIn,
     }

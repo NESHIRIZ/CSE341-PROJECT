@@ -5,7 +5,7 @@
 - [ ] All 4 collections created with proper validation
 - [ ] CRUD endpoints working for all collections  
 - [ ] Unit tests written and passing
-- [ ] OAuth authentication configured
+- [ ] JWT authentication configured
 - [ ] Swagger docs at `/api-docs`
 - [ ] MongoDB Atlas connected
 - [ ] Deployed to Render with custom domain
@@ -31,10 +31,9 @@
 - Show project structure
 
 #### 2. Authentication (1 min)
-- Click "Login with Google"
-- Show Google OAuth flow
-- Display authenticated user session
-- Show logout functionality
+- Show user registration and login using JWT
+- Display returned JWT token and authenticated request flow
+- Show logout by clearing the token client-side
 
 #### 3. CRUD Operations (3-4 mins)
 
@@ -117,7 +116,7 @@ DELETE /api/orders/:id → Delete order
 npm install
 
 # 2. Update .env with your credentials
-# Edit .env file with MongoDB URI and Google OAuth credentials
+# Edit .env file with MongoDB URI and JWT credentials
 
 # 3. Run locally
 npm run dev
@@ -214,7 +213,7 @@ Your submission must cover:
 | CRUD for All Collections | Demonstrate all 5 operations in video |
 | Error Handling | Show validation errors in demo |
 | GET Routes Tests | Run `npm test` and show passing tests |
-| OAuth Implementation | Show Google login flow |
+| JWT Authentication | Show login/register flow with JWT |
 | Swagger Documentation | Show `/api-docs` with all endpoints |
 | Render Deployment | Show live API working on Render |
 | Individual Contributions | Document in README |
@@ -262,14 +261,14 @@ Solution:
 4. Ensure IP whitelist in Atlas
 ```
 
-### OAuth Not Working
+### JWT Authentication Issues
 ```
-Error: Invalid redirect_uri
+Error: Invalid or missing JWT
 
 Solution:
-1. Check GOOGLE_CALLBACK_URL matches OAuth setup
-2. Verify credentials in .env
-3. Check Google Cloud Console settings
+1. Check `JWT_SECRET` is set in `.env`
+2. Verify login credentials and request body
+3. Ensure protected routes include `Authorization: Bearer <token>` header
 ```
 
 ### Tests Failing
@@ -299,7 +298,7 @@ By completing this project, you'll have learned:
 
 ✓ Full-stack API development  
 ✓ Database design with MongoDB  
-✓ OAuth authentication flow  
+✓ JWT authentication flow  
 ✓ RESTful API principles  
 ✓ API documentation with Swagger  
 ✓ Unit testing with Jest  
@@ -312,7 +311,7 @@ By completing this project, you'll have learned:
 
 - [Express.js Docs](https://expressjs.com/)
 - [MongoDB Docs](https://docs.mongodb.com/)
-- [Passport.js Docs](http://www.passportjs.org/)
+- [jsonwebtoken Docs](https://www.npmjs.com/package/jsonwebtoken)
 - [Swagger UI Docs](https://swagger.io/tools/swagger-ui/)
 - [Jest Docs](https://jestjs.io/)
 - [Render Docs](https://render.com/docs)

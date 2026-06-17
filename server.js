@@ -14,6 +14,16 @@ import errorHandler, { notFoundHandler } from './middleware/errorHandler.js';
 const app = express();
 const PORT = Number(process.env.PORT) || 5000;
 
+const validateRequiredEnv = () => {
+  if (process.env.NODE_ENV === 'test') return;
+  if (!process.env.JWT_SECRET) {
+    console.error('Missing environment variable: JWT_SECRET');
+    process.exit(1);
+  }
+};
+
+validateRequiredEnv();
+
 app.use(
   cors({
     origin: true,

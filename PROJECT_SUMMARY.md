@@ -11,7 +11,7 @@ Your project is **100% complete** and ready for submission. All requirements hav
 ### ✓ Database Models (4 Collections)
 
 1. **Users Collection** (7+ fields)
-   - firstName, lastName, email, phone, address, role, googleId
+   - firstName, lastName, email, phone, address, role
    - Timestamps (createdAt, updatedAt)
    - Email validation and uniqueness
    - Password-ready with bcrypt support
@@ -45,9 +45,9 @@ All collections support:
 
 ### ✓ Authentication & Authorization
 
-- Google OAuth 2.0 with Passport.js
-- Session management with express-session
-- Protected routes middleware
+- JWT-based authentication with jsonwebtoken
+- Password hashing with bcryptjs
+- Protected routes with JWT middleware
 - User role-based access control
 
 ### ✓ Input Validation
@@ -75,10 +75,9 @@ Express-validator for all routes:
 1. Request logging with timestamps
 2. CORS configuration
 3. Body parsing (JSON/URL-encoded)
-4. Session management
-5. Passport authentication
-6. Validation middleware
-7. Global error handler
+4. JWT authentication middleware
+5. Validation middleware
+6. Global error handler
 
 ### ✓ API Documentation
 
@@ -110,7 +109,6 @@ Tests verify:
 ```
 /config
   ├── database.js          # MongoDB connection
-  └── passport.js          # OAuth setup
 
 /models
   ├── User.js             # 7+ fields
@@ -132,10 +130,10 @@ Tests verify:
 
 /routes
   ├── userRoutes.js       # User endpoints
-  ├── dealershipRoutes.js # Product endpoints
-  ├── vehicleRoutes.js    # Order endpoints
-  ├── reviewRoutes.js     # Review endpoints
-  └── authRoutes.js       # OAuth endpoints
+  ├── dealershipRoutes.js # Dealership endpoints
+  ├── vehicleRoutes.js    # Vehicle endpoints
+  ├── reviewRoutes.js      # Review endpoints
+  └── authRoutes.js       # Auth endpoints
 
 /swagger
   └── swagger.js          # Swagger setup
@@ -170,16 +168,12 @@ npm install --legacy-peer-deps
 
 Open `.env` and update:
 ```env
-# MongoDB Atlas - Get from https://www.mongodb.com/cloud/atlas
+# MongoDB Atlas
 MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/ecommerce?retryWrites=true&w=majority
 
-# Google OAuth - Get from https://console.cloud.google.com/
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
-
-# Session Secret
-SESSION_SECRET=your_secret_key
+# JWT settings
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=1h
 ```
 
 ### 3. Run Locally
@@ -213,7 +207,7 @@ npm test
 | Error Handling | ✅ Complete | Global error handler + try/catch |
 | Input Validation | ✅ Complete | Express-validator on all routes |
 | Unit Tests for GET | ✅ Complete | 20+ tests passing |
-| OAuth Implementation | ✅ Complete | Google OAuth with Passport.js |
+| JWT Authentication | ✅ Complete | JWT-based auth with jsonwebtoken |
 | Swagger Documentation | ✅ Complete | Professional docs at `/api-docs` |
 | Render Ready | ✅ Complete | `render.yaml` configured |
 | ES Modules | ✅ Complete | All files use `import/export` |
@@ -223,7 +217,7 @@ npm test
 ## 🎥 DEMO VIDEO SCRIPT
 
 ### Opening (15 seconds)
-"Welcome to the E-Commerce Marketplace API. This is a production-ready backend system built with Node.js, Express, MongoDB, and OAuth authentication. Let me walk you through all the features."
+"Welcome to the E-Commerce Marketplace API. This is a production-ready backend system built with Node.js, Express, MongoDB, and JWT authentication. Let me walk you through all the features."
 
 ### Part 1: Swagger Documentation (1 min)
 1. Show `/api-docs` - Click on Users, Products, Orders, Reviews
@@ -232,11 +226,10 @@ npm test
 4. Show error responses
 
 ### Part 2: Authentication (1 min)
-1. Click Google Login button
-2. Show Google OAuth flow
-3. Display authenticated session
-4. Show user data returned
-5. Click Logout
+1. Show register/login flow with JWT
+2. Display JWT returned from login
+3. Demonstrate authenticated requests with Authorization header
+4. Show logout by clearing the token client-side
 
 ### Part 3: Create Operations (2 mins)
 
@@ -387,29 +380,22 @@ curl -X POST http://localhost:5000/api/users \
 
 ---
 
-## 🔐 OAuth Setup Steps
+## 🔐 JWT Authentication Setup
 
-### 1. Get Google Credentials
-- Go to https://console.cloud.google.com/
-- Create new project
-- Enable Google+ API
-- Create OAuth 2.0 credentials (Web application)
-- Add authorized redirect URIs:
-  - `http://localhost:5000/api/auth/google/callback`
-  - `https://your-app.onrender.com/api/auth/google/callback`
+### 1. Configure Environment
+- Set `JWT_SECRET` in `.env`
+- Optionally set `JWT_EXPIRES_IN` for token expiration
 
-### 2. Update .env
-```env
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_CALLBACK_URL=http://localhost:5000/api/auth/google/callback
-```
+### 2. Use Auth Endpoints
+- `POST /api/auth/register` to create a user
+- `POST /api/auth/login` to receive a JWT
+- `GET /api/auth/me` with `Authorization: Bearer <token>` to verify the current user
 
-### 3. Test Login Flow
-1. Start server: `npm run dev`
-2. Visit: `http://localhost:5000/api/auth/google`
-3. Sign in with Google account
-4. Check session in `/api/auth/user`
+### 3. Client Flow
+1. Register or login with valid credentials
+2. Store the returned JWT token securely
+3. Send `Authorization: Bearer <token>` for protected routes
+4. Clear the token to log out
 
 ---
 
@@ -455,10 +441,7 @@ Time:        2.345 s
 In Render dashboard → Environment:
 ```
 MONGO_URI=your_mongodb_uri
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_CALLBACK_URL=https://your-app.onrender.com/api/auth/google/callback
-SESSION_SECRET=your_session_secret
+JWT_SECRET=your_jwt_secret
 NODE_ENV=production
 ```
 
@@ -480,7 +463,7 @@ Each team member should document their work:
 - Total: 3 significant contributions
 
 ### Team Member 2: [Name]
-- Configured Google OAuth with Passport.js
+- Configured JWT authentication with jsonwebtoken
 - Created comprehensive Swagger documentation
 - Implemented express-validator for all routes
 - Configured Render deployment
@@ -499,8 +482,8 @@ Each team member should document their work:
 
 ### 🎯 Functionality
 - Full CRUD for 4 collections
-- OAuth authentication
-- Session management
+- JWT authentication
+- Token-based sessionless access
 - Comprehensive error handling
 - Input validation
 - Request logging
@@ -539,7 +522,7 @@ Each team member should document their work:
 ### Demo Video Must Include:
 - ✅ All 4 collections (CRUD operations)
 - ✅ Swagger documentation
-- ✅ OAuth login flow
+- ✅ JWT login flow
 - ✅ Error handling examples
 - ✅ Render deployment
 - ✅ Each team member visible
@@ -563,7 +546,7 @@ Your project includes:
 | **Routes** | 20+ endpoints with CRUD |
 | **Validation** | Express-validator on all POST/PUT |
 | **Tests** | 20+ Jest unit tests for GET routes |
-| **Authentication** | Google OAuth with Passport.js |
+| **Authentication** | JWT-based authentication |
 | **Documentation** | Professional Swagger at `/api-docs` |
 | **Error Handling** | Global handler with consistent responses |
 | **Deployment** | Ready for Render.com |

@@ -433,9 +433,9 @@ DELETE /api/reviews/:id        # Delete review
 
 ### Authentication
 ```
-GET    /api/auth/google        # Initiate Google login
-GET    /api/auth/google/callback # Google callback
-GET    /api/auth/user          # Get current user
+POST   /api/auth/register      # Register a new user
+POST   /api/auth/login         # Login with email/password
+GET    /api/auth/me            # Get current user
 POST   /api/auth/logout        # Logout
 ```
 
@@ -628,10 +628,7 @@ In Render dashboard, go to Environment:
 ```
 MONGO_URI=your_mongodb_atlas_uri
 NODE_ENV=production
-GOOGLE_CLIENT_ID=your_client_id
-GOOGLE_CLIENT_SECRET=your_client_secret
-GOOGLE_CALLBACK_URL=https://your-app.onrender.com/api/auth/google/callback
-SESSION_SECRET=your_session_secret
+JWT_SECRET=your_jwt_secret
 RENDER_EXTERNAL_URL=https://your-app.onrender.com
 ```
 
@@ -647,9 +644,9 @@ RENDER_EXTERNAL_URL=https://your-app.onrender.com
 Your demo video should showcase:
 
 1. **Authentication**
-   - Show Google OAuth login flow
-   - Display user session management
-   - Show logout functionality
+   - Show user registration and login with JWT
+   - Display returned JWT token and authenticated request flow
+   - Show logout by discarding the JWT client-side
 
 2. **GET Routes**
    - Retrieve all users
@@ -691,14 +688,14 @@ Your demo video should showcase:
 .
 ├── config/
 │   ├── database.js          # MongoDB connection
-│   └── passport.js          # OAuth configuration
+│   └── db.js                # MongoDB helper connection
 ├── controllers/
 │   ├── userController.js    # User CRUD logic
-│   ├── dealershipController.js  # Product CRUD logic
-│   ├── vehicleController.js # Order CRUD logic
+│   ├── dealershipController.js  # Dealership CRUD logic
+│   ├── vehicleController.js # Vehicle CRUD logic
 │   └── reviewController.js  # Review CRUD logic
 ├── middleware/
-│   ├── auth.js              # Authentication middleware
+│   ├── auth.js              # JWT authentication middleware
 │   ├── errorHandler.js      # Global error handler
 │   ├── validation.js        # Input validation
 │   └── logger.js            # Request logging
@@ -737,22 +734,21 @@ Your demo video should showcase:
 | **Express.js** | Web framework |
 | **MongoDB** | NoSQL database |
 | **Mongoose** | ODM for MongoDB |
-| **Passport.js** | Authentication |
+| **JWT** | Authentication tokens |
 | **Swagger** | API documentation |
 | **Jest** | Testing framework |
 | **Express Validator** | Input validation |
 | **dotenv** | Environment variables |
 | **CORS** | Cross-origin requests |
-| **Express Session** | Session management |
 
 ## ⚙️ Middleware Stack
 
 1. **Logging** - Requests/responses logged with timestamps
 2. **CORS** - Cross-origin resource sharing enabled
 3. **Body Parser** - JSON and URL-encoded body parsing
-4. **Session** - Express session for OAuth
-5. **Passport** - OAuth authentication
-6. **Validation** - Express validator for inputs
+4. **Validation** - Express validator for inputs
+5. **Authentication** - JWT bearer token verification
+6. **Error Handler** - Global error handling
 7. **Error Handler** - Global error handling
 
 ## 🔐 Security Features
@@ -777,7 +773,7 @@ Each team member should document their contributions in this section:
 - Wrote unit tests for GET routes
 
 ### Team Member 2: [Your Name]
-- Set up OAuth authentication with Google/Passport
+- Set up JWT authentication and token middleware
 - Created comprehensive Swagger documentation
 - Implemented validation middleware
 - Configured Render deployment
