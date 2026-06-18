@@ -58,6 +58,7 @@ export const createVehicle = async (req, res, next) => {
     });
 
     await vehicle.save();
+    console.log(`[VEHICLE CREATE] Saved vehicle ${vehicle._id} for dealership ${dealerId}`);
     await vehicle.populate('dealerId', 'name location email phone');
 
     res.status(201).json({

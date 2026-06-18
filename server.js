@@ -10,6 +10,7 @@ import vehicleRoutes from './routes/vehicleRoutes.js';
 import dealershipRoutes from './routes/dealershipRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import errorHandler, { notFoundHandler } from './middleware/errorHandler.js';
+import sanitizeMiddleware from './middleware/sanitize.js';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3000;
@@ -36,6 +37,7 @@ app.use(
 app.options('*', cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(sanitizeMiddleware);
 
 app.get('/health', (req, res) => {
   res.status(200).json({ success: true, status: 'ok' });

@@ -25,7 +25,7 @@ describe('Users GET Routes', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john@example.com',
-        password: 'password123',
+        password: 'Password1!',
         role: 'buyer',
       });
 
@@ -33,7 +33,7 @@ describe('Users GET Routes', () => {
         firstName: 'Jane',
         lastName: 'Smith',
         email: 'jane@example.com',
-        password: 'password123',
+        password: 'Password1!',
         role: 'seller',
       });
 
@@ -60,7 +60,7 @@ describe('Users GET Routes', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john@example.com',
-        password: 'password123',
+        password: 'Password1!',
         role: 'buyer',
       });
 
@@ -83,7 +83,7 @@ describe('Users GET Routes', () => {
         firstName: 'John',
         lastName: 'Doe',
         email: 'john@example.com',
-        password: 'password123',
+        password: 'Password1!',
         role: 'buyer',
       });
 
