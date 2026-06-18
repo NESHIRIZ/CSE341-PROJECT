@@ -29,8 +29,13 @@ export const register = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password, role } = req.body;
 
+    console.log(`[REGISTER] Incoming request - Email: ${email}, Name: ${firstName} ${lastName}`);
+
     const existingUser = await User.findOne({ email });
+    console.log(`[REGISTER] Email lookup result:`, existingUser ? 'User found' : 'No user found');
+
     if (existingUser) {
+      console.log(`[REGISTER] Duplicate email detected: ${email}`);
       return res.status(400).json({
         success: false,
         message: 'Email already in use',
@@ -46,6 +51,7 @@ export const register = async (req, res, next) => {
     });
 
     await user.save();
+    console.log(`[REGISTER] New user created successfully - ID: ${user._id}, Email: ${user.email}`);
 
     const token = signToken(user);
     const userResponse = user.toObject();
@@ -58,6 +64,7 @@ export const register = async (req, res, next) => {
       data: userResponse,
     });
   } catch (error) {
+    console.error(`[REGISTER] Error:`, error.message);
     next(error);
   }
 };

@@ -17,9 +17,14 @@ const errorHandler = (err, req, res, next) => {
   // MongoDB duplicate key errors
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue)[0];
+    const normalizedField = field === 'username' ? 'email' : field;
+    const fieldMessages = {
+      email: 'Email already in use',
+      username: 'Email already in use',
+    };
     return res.status(400).json({
       success: false,
-      message: `${field} already exists`,
+      message: fieldMessages[normalizedField] || `${normalizedField} already exists`,
     });
   }
 
