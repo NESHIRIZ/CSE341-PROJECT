@@ -39,6 +39,9 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Ensure a case-insensitive unique index on email to prevent duplicates by case
+userSchema.index({ email: 1 }, { unique: true, collation: { locale: 'en', strength: 2 } });
+
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password') || !this.password) {
     return next();

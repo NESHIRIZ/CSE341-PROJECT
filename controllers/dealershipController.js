@@ -46,6 +46,7 @@ export const createDealership = async (req, res, next) => {
     });
 
     await dealership.save();
+    console.log(`[DEALERSHIP CREATE] Saved dealership ${dealership._id} with email ${dealership.email}`);
 
     res.status(201).json({
       success: true,

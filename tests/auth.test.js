@@ -24,7 +24,7 @@ describe('Authentication Routes', () => {
         firstName: 'Alice',
         lastName: 'Brown',
         email: 'alice@test.com',
-        password: 'Password1',
+        password: 'Password1!',
         role: 'buyer',
       });
 
@@ -39,7 +39,7 @@ describe('Authentication Routes', () => {
       firstName: 'Alice',
       lastName: 'Brown',
       email: 'alice@test.com',
-      password: 'Password1',
+      password: 'Password1!',
       role: 'buyer',
     });
 
@@ -47,7 +47,7 @@ describe('Authentication Routes', () => {
       .post('/api/auth/login')
       .send({
         email: 'alice@test.com',
-        password: 'Password1',
+        password: 'Password1!',
       });
 
     expect(response.status).toBe(200);
@@ -61,7 +61,7 @@ describe('Authentication Routes', () => {
       firstName: 'Alice',
       lastName: 'Brown',
       email: 'alice@test.com',
-      password: 'Password1',
+      password: 'Password1!',
       role: 'buyer',
     });
 
@@ -71,7 +71,7 @@ describe('Authentication Routes', () => {
         firstName: 'Alice',
         lastName: 'Brown',
         email: 'alice@test.com',
-        password: 'Password1',
+        password: 'Password1!',
       });
 
     expect(response.status).toBe(400);
@@ -86,7 +86,7 @@ describe('Authentication Routes', () => {
         firstName: 'Alice',
         lastName: 'Brown',
         email: 'alice@test.com',
-        password: 'Password1',
+        password: 'Password1!',
       });
 
     const response = await request(app)

@@ -17,8 +17,9 @@ const args = process.argv.slice(2);
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB connected for cleanup');
+    const dbName = process.env.MONGO_DB_NAME || 'CSE341ProjectDB';
+    await mongoose.connect(process.env.MONGO_URI, { dbName });
+    console.log(`MongoDB connected for cleanup (database: ${dbName})`);
   } catch (error) {
     console.error('MongoDB connection failed:', error.message);
     process.exit(1);
@@ -30,6 +31,25 @@ const showAllUsers = async () => {
   console.log(`\n📋 Total users in database: ${users.length}\n`);
   users.forEach((user) => {
     console.log(`  - ${user.email} (${user.firstName} ${user.lastName}, ${user._id})`);
+  });
+};
+
+const findDuplicates = async () => {
+  const admin = mongoose.connection.db;
+  const usersCollection = admin.collection('users');
+  const duplicates = await usersCollection.aggregate([
+    { $group: { _id: { $toLower: '$email' }, count: { $sum: 1 }, ids: { $push: '$_id' } } },
+    { $match: { count: { $gt: 1 } } },
+  ]).toArray();
+
+  if (!duplicates || duplicates.length === 0) {
+    console.log('No duplicate emails found');
+    return;
+  }
+
+  console.log(`\n⚠️ Found ${duplicates.length} duplicate email groups:`);
+  duplicates.forEach((d) => {
+    console.log(` - Email: ${d._id}, Count: ${d.count}, IDs: ${d.ids.join(', ')}`);
   });
 };
 
@@ -78,5 +98,8 @@ const main = async () => {
     process.exit(0);
   }
 };
+    else if (args.includes('--find-duplicates')) {
+      await findDuplicates();
+    }
 
 main();
