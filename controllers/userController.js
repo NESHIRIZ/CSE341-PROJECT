@@ -36,26 +36,29 @@ export const getUserById = async (req, res, next) => {
 // Create new user
 export const createUser = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email: rawEmail, password, role } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: 'Email already in use',
-      });
+    const normalizedEmail = rawEmail ? String(rawEmail).trim().toLowerCase() : '';
+
+    // Basic password policy
+    const pwPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!pwPattern.test(password)) {
+      return res.status(400).json({ success: false, message: 'Password does not meet complexity requirements' });
     }
 
-    const user = new User({
-      firstName,
-      lastName,
-      email,
-      password,
-      role: role || 'buyer',
-    });
+    // Prevent open admin creation
+    const assignedRole = role === 'admin' && process.env.ALLOW_ADMIN_REG !== 'true' ? 'buyer' : (role || 'buyer');
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email: normalizedEmail });
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: 'Email already in use' });
+    }
+
+    const user = new User({ firstName, lastName, email: normalizedEmail, password, role: assignedRole });
 
     await user.save();
+    console.log(`[USER CREATE] Saved user ${user._id} with email ${user.email}`);
 
     const userResponse = user.toObject();
     delete userResponse.password;
@@ -73,12 +76,20 @@ export const createUser = async (req, res, next) => {
 // Update user
 export const updateUser = async (req, res, next) => {
   try {
-    const { firstName, lastName, email, role } = req.body;
+    const { firstName, lastName, email: rawEmail, role } = req.body;
     const updateData = {};
 
     if (firstName) updateData.firstName = firstName;
     if (lastName) updateData.lastName = lastName;
-    if (email) updateData.email = email;
+    if (rawEmail) {
+      const normalizedEmail = String(rawEmail).trim().toLowerCase();
+      // Check for duplicates
+      const existingUser = await User.findOne({ email: normalizedEmail });
+      if (existingUser && existingUser._id.toString() !== req.params.id) {
+        return res.status(400).json({ success: false, message: 'Email already in use' });
+      }
+      updateData.email = normalizedEmail;
+    }
     if (role) updateData.role = role;
 
     const user = await User.findByIdAndUpdate(

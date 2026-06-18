@@ -70,6 +70,7 @@ export const createReview = async (req, res, next) => {
     });
 
     await review.save();
+    console.log(`[REVIEW CREATE] Saved review ${review._id} for user ${userId} and vehicle ${vehicleId}`);
     await review.populate('userId', 'firstName lastName email');
     await review.populate('vehicleId', 'make model year price');
 

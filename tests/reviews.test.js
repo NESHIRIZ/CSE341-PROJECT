@@ -21,7 +21,7 @@ describe('Reviews GET Routes', () => {
       firstName: 'Bob',
       lastName: 'Johnson',
       email: 'bob@example.com',
-      password: 'password123',
+      password: 'Password1!',
       role: 'buyer',
     });
     userId = user._id;
